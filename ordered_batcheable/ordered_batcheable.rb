@@ -20,7 +20,9 @@ module OrderedBatcheable
       ids = order(order_by).pluck(primary_key)
 
       ids.each_slice(batch_size) do |batch_ids|
-        where(id: batch_ids).order(order_by).each { |record| yield(record) }
+        where(primary_key => batch_ids).order(order_by).each do |record|
+          yield(record)
+        end
       end
     end
   end
